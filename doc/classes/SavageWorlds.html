@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: SavageWorlds</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">SavageWorlds</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/savageworlds_core_weapons_rb.html">
+                savageworlds_core_weapons.rb
+                </a>
+        <br />
+                <a href="../files/savageworlds_rb.html">
+                savageworlds.rb
+                </a>
+        <br />
+                <a href="../files/savageworlds_dice_rb.html">
+                savageworlds_dice.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+The main Savage Worlds module. Holds the classes and helper methods.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000006">compare_dice</a>&nbsp;&nbsp;
+      <a href="#M000005">get_raises</a>&nbsp;&nbsp;
+      <a href="#M000001">make_dice_string</a>&nbsp;&nbsp;
+      <a href="#M000007">sort_dice</a>&nbsp;&nbsp;
+      <a href="#M000003">trait_string</a>&nbsp;&nbsp;
+      <a href="#M000002">trait_to_symbol</a>&nbsp;&nbsp;
+      <a href="#M000004">valid_trait_score?</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name">Dice</span>
+        <span class="include-name">Dice</span>
+        <span class="include-name">Roll</span>
+      </div>
+    </div>
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Class <a href="SavageWorlds/BasicWeapon.html" class="link">SavageWorlds::BasicWeapon</a><br />
+Class <a href="SavageWorlds/Character.html" class="link">SavageWorlds::Character</a><br />
+Class <a href="SavageWorlds/Gear.html" class="link">SavageWorlds::Gear</a><br />
+Class <a href="SavageWorlds/MeleeWeapon.html" class="link">SavageWorlds::MeleeWeapon</a><br />
+Class <a href="SavageWorlds/RangeWeapon.html" class="link">SavageWorlds::RangeWeapon</a><br />
+Class <a href="SavageWorlds/SWError.html" class="link">SavageWorlds::SWError</a><br />
+Class <a href="SavageWorlds/SWRoll.html" class="link">SavageWorlds::SWRoll</a><br />
+
+    </div>
+
+    <div id="constants-list">
+      <h3 class="section-bar">Constants</h3>
+
+      <div class="name-list">
+        <table summary="Constants">
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">MeleeWeapons</td>
+          <td>=</td>
+          <td class="context-item-value">{     :dagger =&gt; MeleeWeapon.new(&quot;dagger&quot;, :d4, :weight =&gt; 1, :cost =&gt; 25),      :great_sword =&gt; MeleeWeapon.new(&quot;great sword&quot;, :d10, :weight =&gt; 12,        :cost =&gt; 400, :parry =&gt; -1, :notes =&gt; &quot;2 hands&quot;</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+Melee Weapons
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">RangeWeapons</td>
+          <td>=</td>
+          <td class="context-item-value">{     :bow =&gt; RangeWeapon.new(&quot;bow&quot;, &quot;2d6e&quot;, :weight =&gt; 2, :cost =&gt; 250,       :range =&gt; [12, 24, 48], :rate_of_fire =&gt; 1, :shots =&gt; 0,       :minimum_strength =&gt; :d6</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+Range Weapons
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">TraitSplitRE</td>
+          <td>=</td>
+          <td class="context-item-value">/\s+|_/</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+Used in <tt><a href="SavageWorlds.html#M000003">trait_string</a></tt> to
+split a string into one or more parts. It splits based on one or more
+spaces or an underscore.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">AllowedDice</td>
+          <td>=</td>
+          <td class="context-item-value">{     :d4  =&gt; SWRoll.new(&quot;d4e&quot;, true),     :d6  =&gt; SWRoll.new(&quot;d6e&quot;, true),     :d8  =&gt; SWRoll.new(&quot;d8e&quot;, true),     :d10 =&gt; SWRoll.new(&quot;d10e&quot;, true),     :d12 =&gt; SWRoll.new(&quot;d12e&quot;, true)</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+A hash that holds the allowed dice in SW (the keys) and their associated
+roll instances (the values.) See the <tt>dicelib</tt> for more information
+in regards to the +Roll::Roll+ class.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">AllowedDiceOrder</td>
+          <td>=</td>
+          <td class="context-item-value">[:d4, :d6, :d8, :d10, :d12]</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+Because Ruby doesn&#8216;t guarantee Hash keys will stay in order,
+we&#8216;ll use this array instead! TODO: Perhaps use <tt>SortedSet</tt>
+here instead.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">WildDie</td>
+          <td>=</td>
+          <td class="context-item-value">SWRoll.new(&quot;d6e&quot;, true)</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+Sets the roll values for the Wild Die, No Trait, and the Wild Die With No
+Trait.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">NoTrait</td>
+          <td>=</td>
+          <td class="context-item-value">SWRoll.new(&quot;d4-2e&quot;, true)</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">WildDieNoTrait</td>
+          <td>=</td>
+          <td class="context-item-value">SWRoll.new(&quot;d6-2e&quot;, true)</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
+
+        <div class="method-heading">
+          <a href="#M000006" class="method-signature">
+          <span class="method-name">compare_dice</span><span class="method-args">(die1, die2)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Compares two die values from AllowedDice, useable for <tt>sort</tt>
+<em>if</em> you use it with a block. i.e.:
+</p>
+<pre>
+  [:d6, :d10, :d8].sort do |d1, d2|
+    compare_dice(d1, d2)
+  end
+
+  =&gt; [:d6, :d8, :d10]
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000006-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds_dice.rb, line 60</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compare_dice</span>(<span class="ruby-identifier">die1</span>, <span class="ruby-identifier">die2</span>)
+    <span class="ruby-identifier">idx1</span> = <span class="ruby-constant">AllowedDiceOrder</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">die1</span>)
+    <span class="ruby-identifier">idx2</span> = <span class="ruby-constant">AllowedDiceOrder</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">die2</span>)
+
+    <span class="ruby-comment cmt"># This handles values -not- in AllowedDice</span>
+    <span class="ruby-identifier">idx1</span> = <span class="ruby-value">-1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">idx1</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">idx2</span> = <span class="ruby-value">-1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">idx2</span>.<span class="ruby-identifier">nil?</span>
+
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">idx1</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">idx2</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000005" class="method-detail">
+        <a name="M000005"></a>
+
+        <div class="method-heading">
+          <a href="#M000005" class="method-signature">
+          <span class="method-name">get_raises</span><span class="method-args">(roll, target_number=4)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Checks to see if a roll resulted in any Raises, and returns how many were
+found, or 0 if there were none.
+</p>
+<table>
+<tr><td valign="top">roll:</td><td>The value rolled.
+
+</td></tr>
+<tr><td valign="top">target_number:</td><td>The value to beat, defaulting to 4.
+
+</td></tr>
+</table>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000005-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 93</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_raises</span>(<span class="ruby-identifier">roll</span>, <span class="ruby-identifier">target_number</span>=<span class="ruby-value">4</span>)
+    <span class="ruby-keyword kw">return</span> (<span class="ruby-identifier">roll</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">target_number</span>) <span class="ruby-operator">/</span> <span class="ruby-value">4</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000001" class="method-detail">
+        <a name="M000001"></a>
+
+        <div class="method-heading">
+          <a href="#M000001" class="method-signature">
+          <span class="method-name">make_dice_string</span><span class="method-args">(dice)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Helper method to make a SW appropriate dice_string for non-trait dice. The
+&#8216;dice&#8217; argument <em>should</em> be an instance of
+Dice::DiceParts, Roll::Roll or a String. Handy for making SW-esque dice
+(using the &#8216;e&#8217; option) into &#8216;normal&#8217; dice strings.
+IE:
+</p>
+<pre>
+  1d6e =&gt; d6
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000001-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000001-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 41</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">make_dice_string</span>(<span class="ruby-identifier">dice</span>)
+    <span class="ruby-identifier">dice</span> = <span class="ruby-identifier">dice</span>.<span class="ruby-identifier">dup</span>()
+
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">dice</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Dice</span><span class="ruby-operator">::</span><span class="ruby-constant">DiceParts</span>
+      <span class="ruby-comment cmt"># pass</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Roll</span>
+      <span class="ruby-identifier">dice</span> = <span class="ruby-identifier">dice</span>.<span class="ruby-identifier">dice_parts</span>()
+    <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+      <span class="ruby-identifier">dice</span> = <span class="ruby-identifier">parse_dice_string</span>(<span class="ruby-identifier">dice</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">SWError</span>, <span class="ruby-value str">&quot;Argument not a Dice::DiceParts, Roll::Roll or String instance!&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">dice</span>[<span class="ruby-identifier">:num</span>] = <span class="ruby-value">0</span>
+    <span class="ruby-identifier">dice</span>[<span class="ruby-identifier">:explode</span>] = <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">build_dice_string</span>(<span class="ruby-identifier">dice</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000007" class="method-detail">
+        <a name="M000007"></a>
+
+        <div class="method-heading">
+          <a href="#M000007" class="method-signature">
+          <span class="method-name">sort_dice</span><span class="method-args">(dice=[])</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Used to sort an array of dice. NOTE: Values -not- in AllowedDice end up at
+the front of the array.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000007-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds_dice.rb, line 74</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sort_dice</span>(<span class="ruby-identifier">dice</span>=[])
+    <span class="ruby-keyword kw">return</span> [] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dice</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">!=</span> <span class="ruby-constant">Array</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">dice</span>.<span class="ruby-identifier">sort</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">d1</span>, <span class="ruby-identifier">d2</span><span class="ruby-operator">|</span> <span class="ruby-identifier">compare_dice</span>(<span class="ruby-identifier">d1</span>, <span class="ruby-identifier">d2</span>) }
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000003" class="method-detail">
+        <a name="M000003"></a>
+
+        <div class="method-heading">
+          <a href="#M000003" class="method-signature">
+          <span class="method-name">trait_string</span><span class="method-args">(trait)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Takes a symbol, turns it into a string, splits it based on the
+<tt>TraitSplitRE</tt> regex above, collects each word and capitalizes them,
+then returns them joined by spaces.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000003-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 75</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">trait_string</span>(<span class="ruby-identifier">trait</span>)
+    <span class="ruby-identifier">trait</span> = <span class="ruby-identifier">trait</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">split</span>(<span class="ruby-constant">TraitSplitRE</span>).<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">str</span>.<span class="ruby-identifier">capitalize</span>()
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">trait</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; &quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000002" class="method-detail">
+        <a name="M000002"></a>
+
+        <div class="method-heading">
+          <a href="#M000002" class="method-signature">
+          <span class="method-name">trait_to_symbol</span><span class="method-args">(trait=&quot;&quot;)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Takes a trait string, and after checking if it&#8216;s already a symbol, an
+empty string, or not a string instance, replaces spaces with an underscore,
+downcases it, and turns it into a symbol. Returns <tt>nil</tt> if it fails
+any of those tests.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000002-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 65</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">trait_to_symbol</span>(<span class="ruby-identifier">trait</span>=<span class="ruby-value str">&quot;&quot;</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">trait</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">trait</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Symbol</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">trait</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">trait</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">trait</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">!=</span> <span class="ruby-constant">String</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">trait</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\s+/</span>, <span class="ruby-value str">&quot;_&quot;</span>).<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>()
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000004" class="method-detail">
+        <a name="M000004"></a>
+
+        <div class="method-heading">
+          <a href="#M000004" class="method-signature">
+          <span class="method-name">valid_trait_score?</span><span class="method-args">(trait)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Checks to see if the given trait, a symbol, is in the <tt>AllowedDice</tt>
+hash.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000004-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 84</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_trait_score?</span>(<span class="ruby-identifier">trait</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">trait</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">AllowedDice</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">trait</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

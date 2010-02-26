@@ -1,0 +1,7 @@
+
+REQUIRES my dicelib.rb file:
+
+  http://github.com/syntruth/Ruby-Dice-Library
+
+Full RDOC generated API files are in doc/.
+

@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: SavageWorlds::Character</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">SavageWorlds::Character</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/savageworlds_rb.html">
+                savageworlds.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Models a Savage Worlds character, in a mostly generic way.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000016">add_edge</a>&nbsp;&nbsp;
+      <a href="#M000018">add_hindrance</a>&nbsp;&nbsp;
+      <a href="#M000014">add_skill</a>&nbsp;&nbsp;
+      <a href="#M000011">get_trait</a>&nbsp;&nbsp;
+      <a href="#M000013">has_skill?</a>&nbsp;&nbsp;
+      <a href="#M000009">is_wildcard?</a>&nbsp;&nbsp;
+      <a href="#M000008">new</a>&nbsp;&nbsp;
+      <a href="#M000020">parry</a>&nbsp;&nbsp;
+      <a href="#M000017">remove_edge</a>&nbsp;&nbsp;
+      <a href="#M000019">remove_hindrance</a>&nbsp;&nbsp;
+      <a href="#M000015">remove_skill</a>&nbsp;&nbsp;
+      <a href="#M000010">stats</a>&nbsp;&nbsp;
+      <a href="#M000022">to_s</a>&nbsp;&nbsp;
+      <a href="#M000021">toughness</a>&nbsp;&nbsp;
+      <a href="#M000012">trait_roll</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+    <div id="constants-list">
+      <h3 class="section-bar">Constants</h3>
+
+      <div class="name-list">
+        <table summary="Constants">
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">TraitResult</td>
+          <td>=</td>
+          <td class="context-item-value">Struct.new(:trait, :wild_die)</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+To hold the results of a trait roll.
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">agility</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+These can be changed. For now. XXX I might override these so I can do some
+checking of assigned values. Right now this makes it easy and convient to
+do mass-assignement.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">edges</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The read-only attributes. Skills, Edges and Hindrances have their own
+access methods.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">hindrances</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The read-only attributes. Skills, Edges and Hindrances have their own
+access methods.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">name</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The read-only attributes. Skills, Edges and Hindrances have their own
+access methods.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">skills</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The read-only attributes. Skills, Edges and Hindrances have their own
+access methods.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">smarts</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+These can be changed. For now. XXX I might override these so I can do some
+checking of assigned values. Right now this makes it easy and convient to
+do mass-assignement.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">spirit</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+These can be changed. For now. XXX I might override these so I can do some
+checking of assigned values. Right now this makes it easy and convient to
+do mass-assignement.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">strength</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+These can be changed. For now. XXX I might override these so I can do some
+checking of assigned values. Right now this makes it easy and convient to
+do mass-assignement.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">vigor</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+These can be changed. For now. XXX I might override these so I can do some
+checking of assigned values. Right now this makes it easy and convient to
+do mass-assignement.
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000008" class="method-detail">
+        <a name="M000008"></a>
+
+        <div class="method-heading">
+          <a href="#M000008" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(name, wild=false, stats={}, skills={}, others={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Character.html">Character</a> constructor.
+</p>
+<table>
+<tr><td valign="top"><tt>name</tt>:</td><td>The name of the character.
+
+</td></tr>
+<tr><td valign="top"><tt>wild</tt>:</td><td>A boolean; if true, this character is a Wild Card.
+
+</td></tr>
+<tr><td valign="top"><tt><a href="Character.html#M000010">stats</a></tt>:</td><td>A hash containing the primary traits of the character, with each trait as
+the key (a string or symbol) and a die-value (one of the
+<tt>AllowedDice</tt> keys) as the values.
+
+</td></tr>
+<tr><td valign="top"><tt>skills</tt>:</td><td>A hash where each key is a skill name and each value a die-value from
+AllowedDice, like <tt><a href="Character.html#M000010">stats</a></tt>
+above.
+
+</td></tr>
+<tr><td valign="top"><tt>others</tt>:</td><td>A hash containining optional other values. Currently, only <em>two</em>
+values are checked for: Edges and Hindrances.
+
+<table>
+<tr><td valign="top"><tt>edges</tt>:</td><td>Contains an array of Edge names.
+
+</td></tr>
+<tr><td valign="top"><tt>hindrances</tt>:</td><td>Contains an array of Hindrance names.
+
+</td></tr>
+</table>
+</td></tr>
+</table>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000008-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 132</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">wild</span>=<span class="ruby-keyword kw">false</span>, <span class="ruby-identifier">stats</span>={}, <span class="ruby-identifier">skills</span>={}, <span class="ruby-identifier">others</span>={})
+      <span class="ruby-ivar">@name</span> = <span class="ruby-identifier">name</span>
+      <span class="ruby-ivar">@wildcard</span> = <span class="ruby-identifier">wild</span>
+      <span class="ruby-ivar">@skills</span> = {}
+      <span class="ruby-ivar">@edges</span> = []
+      <span class="ruby-ivar">@hindrances</span> = []
+
+      <span class="ruby-identifier">stats</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stat</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">st</span> = <span class="ruby-node">&quot;#{stat}=&quot;</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">st</span>)
+          <span class="ruby-identifier">die</span> = <span class="ruby-identifier">valid_trait_score?</span>(<span class="ruby-identifier">stats</span>[<span class="ruby-identifier">stat</span>])
+          <span class="ruby-identifier">die</span> = <span class="ruby-identifier">:d6</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">die</span>.<span class="ruby-identifier">nil?</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">st</span>, <span class="ruby-identifier">die</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">skills</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">skill</span>, <span class="ruby-identifier">die</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">add_skill</span>(<span class="ruby-identifier">skill</span>, <span class="ruby-identifier">die</span>)
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">others</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">:edges</span>)
+        <span class="ruby-identifier">others</span>[<span class="ruby-identifier">:edges</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">edge</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">add_edge</span>(<span class="ruby-identifier">edge</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">others</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">:hindrances</span>)
+        <span class="ruby-identifier">others</span>[<span class="ruby-identifier">:hindrances</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">hindrance</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">add_hindrance</span>(<span class="ruby-identifier">hindrance</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000016" class="method-detail">
+        <a name="M000016"></a>
+
+        <div class="method-heading">
+          <a href="#M000016" class="method-signature">
+          <span class="method-name">add_edge</span><span class="method-args">(edge=&quot;&quot;)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000016-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000016-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 232</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_edge</span>(<span class="ruby-identifier">edge</span>=<span class="ruby-value str">&quot;&quot;</span>)
+      <span class="ruby-identifier">edge</span> = <span class="ruby-identifier">trait_string</span>(<span class="ruby-identifier">edge</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">edge</span>.<span class="ruby-identifier">any?</span>
+        <span class="ruby-ivar">@edges</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">edge</span>)
+        <span class="ruby-ivar">@edges</span>.<span class="ruby-identifier">sort!</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000018" class="method-detail">
+        <a name="M000018"></a>
+
+        <div class="method-heading">
+          <a href="#M000018" class="method-signature">
+          <span class="method-name">add_hindrance</span><span class="method-args">(hindrance=&quot;&quot;)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000018-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000018-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 251</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_hindrance</span>(<span class="ruby-identifier">hindrance</span>=<span class="ruby-value str">&quot;&quot;</span>)
+      <span class="ruby-identifier">hindrance</span> = <span class="ruby-identifier">trait_string</span>(<span class="ruby-identifier">hindrance</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">hindrance</span>.<span class="ruby-identifier">any?</span>
+        <span class="ruby-ivar">@hindrances</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">hindrance</span>)
+        <span class="ruby-ivar">@hindrances</span>.<span class="ruby-identifier">sort!</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000014" class="method-detail">
+        <a name="M000014"></a>
+
+        <div class="method-heading">
+          <a href="#M000014" class="method-signature">
+          <span class="method-name">add_skill</span><span class="method-args">(skill, die)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000014-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000014-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 220</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_skill</span>(<span class="ruby-identifier">skill</span>, <span class="ruby-identifier">die</span>)
+      <span class="ruby-identifier">skill</span> = <span class="ruby-identifier">trait_to_symbol</span>(<span class="ruby-identifier">skill</span>)
+      <span class="ruby-identifier">die</span> = <span class="ruby-identifier">valid_trait_score?</span>(<span class="ruby-identifier">die</span>) <span class="ruby-keyword kw">or</span> <span class="ruby-constant">NoTrait</span>
+      <span class="ruby-ivar">@skills</span>[<span class="ruby-identifier">skill</span>] = <span class="ruby-identifier">die</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000011" class="method-detail">
+        <a name="M000011"></a>
+
+        <div class="method-heading">
+          <a href="#M000011" class="method-signature">
+          <span class="method-name">get_trait</span><span class="method-args">(trait)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000011-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000011-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 180</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_trait</span>(<span class="ruby-identifier">trait</span>)
+      <span class="ruby-identifier">trait</span> = <span class="ruby-identifier">trait_to_symbol</span>(<span class="ruby-identifier">trait</span>)
+      <span class="ruby-comment cmt"># Look for attributes first, then for skills.</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">trait</span>)
+        <span class="ruby-keyword kw">return</span> <span class="ruby-constant">AllowedDice</span>[<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">trait</span>)]
+      <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@skills</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">trait</span>)
+        <span class="ruby-keyword kw">return</span> <span class="ruby-constant">AllowedDice</span>[<span class="ruby-ivar">@skills</span>[<span class="ruby-identifier">trait</span>]]
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-comment cmt"># Not found, return nil.</span>
+      <span class="ruby-keyword kw">return</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000013" class="method-detail">
+        <a name="M000013"></a>
+
+        <div class="method-heading">
+          <a href="#M000013" class="method-signature">
+          <span class="method-name">has_skill?</span><span class="method-args">(skill)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000013-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000013-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 214</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_skill?</span>(<span class="ruby-identifier">skill</span>)
+      <span class="ruby-identifier">skill</span> = <span class="ruby-identifier">trait_to_symbol</span>(<span class="ruby-identifier">skill</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@skills</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">skill</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000009" class="method-detail">
+        <a name="M000009"></a>
+
+        <div class="method-heading">
+          <a href="#M000009" class="method-signature">
+          <span class="method-name">is_wildcard?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Just to keep this Ruby-esque
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000009-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 167</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_wildcard?</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@wildcard</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000020" class="method-detail">
+        <a name="M000020"></a>
+
+        <div class="method-heading">
+          <a href="#M000020" class="method-signature">
+          <span class="method-name">parry</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000020-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000020-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 269</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parry</span>
+      <span class="ruby-identifier">p</span> = <span class="ruby-value">2</span>
+      <span class="ruby-identifier">f</span> = <span class="ruby-identifier">get_trait</span>(<span class="ruby-identifier">:fighting</span>)
+      <span class="ruby-identifier">p</span> = <span class="ruby-value">2</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">half_value</span>() <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">f</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">f</span> <span class="ruby-operator">!=</span> <span class="ruby-constant">NoTrait</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">p</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000017" class="method-detail">
+        <a name="M000017"></a>
+
+        <div class="method-heading">
+          <a href="#M000017" class="method-signature">
+          <span class="method-name">remove_edge</span><span class="method-args">(edge=&quot;&quot;)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000017-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000017-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 241</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_edge</span>(<span class="ruby-identifier">edge</span>=<span class="ruby-value str">&quot;&quot;</span>)
+      <span class="ruby-identifier">edge</span> = <span class="ruby-identifier">trait_string</span>(<span class="ruby-identifier">edge</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">edge</span>.<span class="ruby-identifier">any?</span>
+        <span class="ruby-ivar">@edges</span>.<span class="ruby-identifier">reject!</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">e</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">edge</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000019" class="method-detail">
+        <a name="M000019"></a>
+
+        <div class="method-heading">
+          <a href="#M000019" class="method-signature">
+          <span class="method-name">remove_hindrance</span><span class="method-args">(hindrance=&quot;&quot;)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000019-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000019-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 260</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_hindrance</span>(<span class="ruby-identifier">hindrance</span>=<span class="ruby-value str">&quot;&quot;</span>)
+      <span class="ruby-identifier">hindrance</span> = <span class="ruby-identifier">trait_string</span>(<span class="ruby-identifier">hindrance</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">hindrance</span>.<span class="ruby-identifier">any?</span>
+        <span class="ruby-ivar">@hindrances</span>.<span class="ruby-identifier">reject!</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">h</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">h</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">hindrance</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000015" class="method-detail">
+        <a name="M000015"></a>
+
+        <div class="method-heading">
+          <a href="#M000015" class="method-signature">
+          <span class="method-name">remove_skill</span><span class="method-args">(skill)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000015-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000015-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 227</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_skill</span>(<span class="ruby-identifier">skill</span>)
+      <span class="ruby-identifier">skill</span> = <span class="ruby-identifier">trait_to_symbol</span>(<span class="ruby-identifier">skill</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@skills</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">skill</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000010" class="method-detail">
+        <a name="M000010"></a>
+
+        <div class="method-heading">
+          <a href="#M000010" class="method-signature">
+          <span class="method-name">stats</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000010-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000010-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 171</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stats</span>
+      <span class="ruby-keyword kw">return</span> [<span class="ruby-identifier">:agility</span>, <span class="ruby-identifier">:smarts</span>, <span class="ruby-identifier">:spirit</span>, 
+        <span class="ruby-identifier">:strength</span>, <span class="ruby-identifier">:vigor</span>
+      ].<span class="ruby-identifier">inject</span>({}) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">d</span>, <span class="ruby-identifier">stat</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">d</span>[<span class="ruby-identifier">stat</span>] = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">stat</span>)
+        <span class="ruby-identifier">d</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000022" class="method-detail">
+        <a name="M000022"></a>
+
+        <div class="method-heading">
+          <a href="#M000022" class="method-signature">
+          <span class="method-name">to_s</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Used for printing the character as a simple text representation.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000022-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000022-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 282</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>
+
+      <span class="ruby-comment cmt"># Proc object to reduce redundant code, used to </span>
+      <span class="ruby-comment cmt"># print a simple title followed by a line of 30</span>
+      <span class="ruby-comment cmt"># dash marks on the following line.</span>
+      <span class="ruby-identifier">title</span> = <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">t</span>.<span class="ruby-identifier">center</span>(<span class="ruby-value">30</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;-&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-value">30</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+      
+      <span class="ruby-identifier">s</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">name</span>
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot; (Wild Card)&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@wildcard</span>
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;\n\n&quot;</span>
+
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">title</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value str">&quot;Stats&quot;</span>)
+      [<span class="ruby-identifier">:agility</span>, <span class="ruby-identifier">:smarts</span>, <span class="ruby-identifier">:spirit</span>, <span class="ruby-identifier">:strength</span>, <span class="ruby-identifier">:vigor</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">st</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;%-24s: %s\n&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">trait_string</span>(<span class="ruby-identifier">st</span>), <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">st</span>)]
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;\n&quot;</span>
+
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">title</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value str">&quot;Skills&quot;</span>)
+      <span class="ruby-identifier">skills</span> = <span class="ruby-ivar">@skills</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sk</span><span class="ruby-operator">|</span>
+        <span class="ruby-comment cmt"># A simple Symbol to String conversion.</span>
+        <span class="ruby-comment cmt"># We have to do this, since Symbols are not</span>
+        <span class="ruby-comment cmt"># sortable.</span>
+        <span class="ruby-comment cmt"># XXX Maybe feed this to trait_string()? </span>
+        <span class="ruby-identifier">sk</span>.<span class="ruby-identifier">to_s</span>() 
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-comment cmt"># Sort in-place</span>
+      <span class="ruby-identifier">skills</span>.<span class="ruby-identifier">sort!</span>
+      <span class="ruby-identifier">skills</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sk</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;%-24s: %s\n&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">trait_string</span>(<span class="ruby-identifier">sk</span>), <span class="ruby-ivar">@skills</span>[<span class="ruby-identifier">sk</span>.<span class="ruby-identifier">to_sym</span>()]]
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;\n&quot;</span>
+
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">title</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value str">&quot;Edges &amp; Hindrances&quot;</span>)
+      <span class="ruby-ivar">@edges</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">edge</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">edge</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-ivar">@hindrances</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">hind</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">hind</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;\n&quot;</span>
+      
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000021" class="method-detail">
+        <a name="M000021"></a>
+
+        <div class="method-heading">
+          <a href="#M000021" class="method-signature">
+          <span class="method-name">toughness</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000021-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000021-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 276</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">toughness</span>
+      <span class="ruby-identifier">t</span> = <span class="ruby-value">2</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">get_trait</span>(<span class="ruby-identifier">:vigor</span>).<span class="ruby-identifier">half_value</span>()
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000012" class="method-detail">
+        <a name="M000012"></a>
+
+        <div class="method-heading">
+          <a href="#M000012" class="method-signature">
+          <span class="method-name">trait_roll</span><span class="method-args">(trait, mod=0)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000012-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000012-source">
+<pre>
+<span class="ruby-comment cmt"># File savageworlds.rb, line 192</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">trait_roll</span>(<span class="ruby-identifier">trait</span>, <span class="ruby-identifier">mod</span>=<span class="ruby-value">0</span>)
+      <span class="ruby-identifier">result</span> = <span class="ruby-constant">TraitResult</span>.<span class="ruby-identifier">new</span>()
+
+      <span class="ruby-identifier">die</span> = <span class="ruby-identifier">get_trait</span>(<span class="ruby-identifier">trait</span>)
+
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">die</span>.<span class="ruby-identifier">nil?</span>
+        <span class="ruby-identifier">result</span>.<span class="ruby-identifier">trait</span> = <span class="ruby-constant">NoTrait</span>.<span class="ruby-identifier">roll</span>(<span class="ruby-identifier">mod</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">result</span>.<span class="ruby-identifier">trait</span> = <span class="ruby-identifier">die</span>.<span class="ruby-identifier">roll</span>(<span class="ruby-identifier">mod</span>)
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@wildcard</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">die</span>.<span class="ruby-identifier">nil?</span>
+          <span class="ruby-identifier">result</span>.<span class="ruby-identifier">wild_die</span> = <span class="ruby-constant">WildDieNoTrait</span>.<span class="ruby-identifier">roll</span>(<span class="ruby-identifier">mod</span>)
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">result</span>.<span class="ruby-identifier">wild_die</span> = <span class="ruby-constant">WildDie</span>.<span class="ruby-identifier">roll</span>(<span class="ruby-identifier">mod</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">result</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
