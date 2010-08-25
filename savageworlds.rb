@@ -31,40 +31,14 @@ module SavageWorlds
   # splits based on one or more spaces or an underscore.
   TraitSplitRE = /\s+|_/
 
-  # Helper method to make a SW appropriate dice_string for
-  # non-trait dice. The 'dice' argument _should_ be an
-  # instance of Dice::DiceParts, Roll::Roll or a String.
-  # Handy for making SW-esque dice (using the 'e' option) into
-  # 'normal' dice strings. IE: 
-  #
-  #   1d6e => d6
-  def make_dice_string(dice)
-    dice = dice.dup()
-
-    case dice
-    when Dice::DiceParts
-      # pass
-    when Roll
-      dice = dice.dice_parts()
-    when String
-      dice = parse_dice_string(dice)
-    else
-      raise SWError, "Argument not a Dice::DiceParts, Roll::Roll or String instance!"
-    end
-
-    dice[:num] = 0
-    dice[:explode] = 0
-    return build_dice_string(dice)
-  end
-
   # Takes a trait string, and after checking if it's
   # already a  symbol, an empty string, or not a string 
   # instance, replaces spaces with an underscore, 
   # downcases it, and turns it into a symbol.
   # Returns +nil+ if it fails any of those tests.
   def trait_to_symbol(trait="")
-    return trait if trait.class == Symbol
-    return nil if trait.empty? or trait.nil? or trait.class != String
+    return trait if trait.is_a?(Symbol)
+    return nil if not trait.is_a?(String) or trait.empty? or trait.nil?
     return trait.gsub(/\s+/, "_").downcase.to_sym()
   end
 
@@ -80,9 +54,9 @@ module SavageWorlds
   end
 
   # Checks to see if the given trait, a symbol, is in the
-  # +AllowedDice+ hash.
+  # +Dice::AllowedDice+ hash.
   def valid_trait_score?(trait)
-    return trait if AllowedDice.has_key?(trait)
+    return trait if Dice::AllowedDice.has_key?(trait)
   end
 
   # Checks to see if a roll resulted in any Raises, and returns
@@ -120,10 +94,10 @@ module SavageWorlds
     # +stats+::
     #   A hash containing the primary traits of the character, with
     #   each trait as the key (a string or symbol) and a die-value
-    #   (one of the +AllowedDice+ keys) as the values.
+    #   (one of the +Dice::AllowedDice+ keys) as the values.
     # +skills+::
     #   A hash where each key is a skill name and each value a die-value
-    #   from AllowedDice, like +stats+ above. 
+    #   from Dice::AllowedDice, like +stats+ above. 
     # +others+::
     #   A hash containining optional other values. Currently,
     #   only _two_ values are checked for: Edges and Hindrances.
@@ -139,8 +113,7 @@ module SavageWorlds
       stats.keys.each do |stat|
         st = "#{stat}="
         if self.respond_to?(st)
-          die = valid_trait_score?(stats[stat])
-          die = :d6 if die.nil?
+          die = valid_trait_score?(stats[stat]) or :d6
           self.send(st, die)
         end
       end
@@ -169,7 +142,8 @@ module SavageWorlds
     end
 
     def stats
-      return [:agility, :smarts, :spirit, 
+      return [:agility, 
+        :smarts, :spirit, 
         :strength, :vigor
       ].inject({}) do |d, stat|
         d[stat] = self.send(stat)
@@ -181,12 +155,12 @@ module SavageWorlds
       trait = trait_to_symbol(trait)
       # Look for attributes first, then for skills.
       if self.respond_to?(trait)
-        return AllowedDice[self.send(trait)]
+        return Dice::AllowedDice[self.send(trait)]
       elsif @skills.has_key?(trait)
-        return AllowedDice[@skills[trait]]
+        return Dice::AllowedDice[@skills[trait]]
       end
       # Not found, return nil.
-      return
+      return nil
     end
 
     def trait_roll(trait, mod=0)
@@ -194,17 +168,17 @@ module SavageWorlds
 
       die = get_trait(trait)
 
-      if die.nil?
-        result.trait = NoTrait.roll(mod)
+      result.trait = if die.nil?
+        NoTrait.roll.total() + mod
       else
-        result.trait = die.roll(mod)
+        die.roll.total() + mod
       end
 
       if @wildcard
-        if die.nil?
-          result.wild_die = WildDieNoTrait.roll(mod)
+        result.wild_die = if die.nil?
+          WildDieNoTrait.roll.total() + mod
         else
-          result.wild_die = WildDie.roll(mod)
+          WildDie.roll.total() + mod
         end
       end
 
@@ -213,8 +187,7 @@ module SavageWorlds
 
     def has_skill?(skill)
       skill = trait_to_symbol(skill)
-      return true if @skills.has_key?(skill)
-      return false
+      return @skills.has_key?(skill)
     end
 
     def add_skill(skill, die)
@@ -231,7 +204,7 @@ module SavageWorlds
 
     def add_edge(edge="")
       edge = trait_string(edge)
-      if edge.any?
+      if not edge.empty?
         @edges.push(edge)
         @edges.sort!
       end
@@ -240,7 +213,7 @@ module SavageWorlds
 
     def remove_edge(edge="")
       edge = trait_string(edge)
-      if edge.any?
+      if not edge.empty?
         @edges.reject! do |e|
           e == edge
         end
@@ -250,7 +223,7 @@ module SavageWorlds
  
     def add_hindrance(hindrance="")
       hindrance = trait_string(hindrance)
-      if hindrance.any?
+      if hindrance.empty?
         @hindrances.push(hindrance)
         @hindrances.sort!
       end
@@ -259,7 +232,7 @@ module SavageWorlds
 
     def remove_hindrance(hindrance="")
       hindrance = trait_string(hindrance)
-      if hindrance.any?
+      if hindrance.empty?
         @hindrances.reject! do |h|
           h == hindrance
         end
@@ -383,13 +356,11 @@ module SavageWorlds
   class BasicWeapon < Gear
     attr_reader :damage
 
-    WeaponResult = Struct.new(:total, :damage)
-
     def initialize(name, damage, options={})
-      if AllowedDice.has_key?(damage)
-        @damage = AllowedDice[damage]
+      if Dice::AllowedDice.has_key?(damage)
+        @damage = Dice::AllowedDice[damage]
       else
-        @damage = SWRoll.new(damage, true)
+        @damage = Dice::SWRoll.new(damage)
       end
       super(name, options)
     end
@@ -407,12 +378,11 @@ module SavageWorlds
     end
 
     def roll_damage(mod=0)
-      dmg = @damage.roll(mod)
-      return WeaponResult.new(dmg.total, dmg)
+      @damage.roll.total() + mod
     end
 
     def damage_string
-      return make_dice_string(@damage)
+      return @damage.to_s.gsub(/[e ]/, "")
     end
 
     def to_s
@@ -438,15 +408,11 @@ module SavageWorlds
   end
 
   class MeleeWeapon < BasicWeapon
-    MeleeResult = Struct.new(:total, :strength, :damage)
 
     def roll_damage(str, mod=0)
-      str_roll = str.roll()
-      dmg_roll = @damage.roll()
-
-      t = str_roll.total + dmg_roll.total + mod
-      result = MeleeResult.new(t, str_roll, dmg_roll)
-      return result
+      str_roll = str.roll.total()
+      dmg_roll = @damage.roll.total()
+      return str_roll + dmg_roll + mod
     end
 
     def damage_string
@@ -464,7 +430,6 @@ module SavageWorlds
   end
 
   class RangeWeapon < BasicWeapon
-    RangeResult = Struct.new(:total, :damage)
 
     # We have a local constructor, so we can test
     # for a range option.
@@ -473,18 +438,17 @@ module SavageWorlds
         range = options[:range]
 
         # Make sure we have 3 ranges...
-        if range.class != Array or range.length != 3
+        if not range.is_a?(Array) or range.length != 3
           raise SWError, "RangeWeapon requires a :range option of 3 elements!"
         end
 
         # ...and then make sure they are integers.
-        range.collect! do |r|
-          r.to_i()
-        end
+        range.collect! {|r| r.to_i()}
       else
         range = [0, 0, 0]
       end
       options[:range] = range
+
       super(name, damage, options)
     end
 

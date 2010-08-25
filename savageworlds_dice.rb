@@ -1,28 +1,37 @@
-module SavageWorlds
-  require "dicelib"
-  include Dice
-  include Roll
+require "dicelib"
 
-  # A Subclass of Roll::Roll to add a few helper methods.
+module Dice
+
+  # A Subclass of Dice::Roll to add a few helper methods.
+  # Can't use a SimpleRoll instance, due to No Trait rolls
+  # having a static -2 modifier to the dice roll.
   class SWRoll < Roll
-    def initialize(dstr, do_single=true)
-      super(dstr, do_single)
-      @value = self.maximum()
-    end
 
-    def value
-      return @value
+    attr_reader :value
+
+    def initialize(dstr)
+      super(dstr)
+      @value = Dice.maximum(dstr)
+      @sw_result = nil
     end
 
     def half_value
       return @value / 2
     end
 
-    def to_s
-      d = @dice_parts.dup()
-      d[:num] = 0
-      d[:explode] = 0
-      return build_dice_string(d)
+    def roll
+      @sw_result = super()
+      return self
+    end
+
+    def total
+      self.roll if @sw_result.nil?
+      return @sw_result.first.total()
+    end
+
+    def tally
+      self.roll if @sw_result.nil?
+      return self.result.first.sections.first.tally()
     end
 
   end
@@ -31,11 +40,11 @@ module SavageWorlds
   # associated roll instances (the values.) See the +dicelib+ for more
   # information in regards to the +Roll::Roll+ class.
   AllowedDice = {
-    :d4  => SWRoll.new("d4e", true),
-    :d6  => SWRoll.new("d6e", true),
-    :d8  => SWRoll.new("d8e", true),
-    :d10 => SWRoll.new("d10e", true),
-    :d12 => SWRoll.new("d12e", true)
+    :d4  => SWRoll.new("d4e"),
+    :d6  => SWRoll.new("d6e"),
+    :d8  => SWRoll.new("d8e"),
+    :d10 => SWRoll.new("d10e"),
+    :d12 => SWRoll.new("d12e")
   }
 
   # Because Ruby doesn't guarantee Hash keys will stay
@@ -45,9 +54,9 @@ module SavageWorlds
 
   # Sets the roll values for the Wild Die, No Trait, and the Wild Die
   # With No Trait.
-  WildDie = SWRoll.new("d6e", true)
-  NoTrait = SWRoll.new("d4-2e", true)
-  WildDieNoTrait = SWRoll.new("d6-2e", true)
+  WildDie        = SWRoll.new("d6e")
+  NoTrait        = SWRoll.new("d4e-2")
+  WildDieNoTrait = SWRoll.new("d6e-2")
 
   # Compares two die values from AllowedDice, useable for
   # +sort+ _if_ you use it with a block. i.e.:
@@ -72,7 +81,7 @@ module SavageWorlds
   # NOTE: Values -not- in AllowedDice end up at the front
   # of the array.
   def sort_dice(dice=[])
-    return [] if dice.class != Array
+    return [] if not dice.is_a?(Array)
     return dice.sort {|d1, d2| compare_dice(d1, d2) }
   end
 
